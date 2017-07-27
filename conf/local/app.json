@@ -1,0 +1,64 @@
+{
+	"app" : {
+		"mode": "local"
+	},
+	"twitter" : {
+		"consumerKey": "rqYr2TrRHxNbGDh6vz6QGkbrp",
+		"consumerSecret": "AQXQSSWnuLpPJaJ1J6ecfarzAOmUcywfzyWn16NZGKYBeVpuca",
+		"callbackUrl": "http://localhost:3000/auth/twitter/callback"
+	},
+	"facebook" : {
+		"clientId": "267178249975240",
+		"clientSecret": "8bd853c264f8a402b539565c162138ef",
+		"callbackUrl": "http://localhost:3000/auth/facebook/callback"
+	},
+	"yahoo" : {
+		"appId": "dj0zaiZpPThaTVBGMWV4MVc2SyZzPWNvbnN1bWVyc2VjcmV0Jng9ZjU-",
+		"appSecret": "a35ee78e5e1422fe1d9a711cbbf7c9c48082f484"
+	},
+	"mysqlConf" : {
+		"host": "localhost",
+		"user": "root",
+		"password": "root",
+		"database": "studio",
+		"connectTimeout" : 5000
+	},
+	"mongodbConf" : {
+		"secret": "studio",
+		"host": "mongodb://localhost:27017/studio",
+		"collection" : "session"
+	},
+	"logger": {
+		"appenders": [
+			{
+				"category": "access",
+				"type": "dateFile",
+				"filename": "/tmp/access.log",
+				"pattern": "-yyyy-MM-dd",
+				"backups": 3
+			},
+			{
+				"category": "system",
+				"type": "dateFile",
+				"filename": "/tmp/system.log",
+				"pattern": "-yyyy-MM-dd",
+				"backups": 3
+			},
+			{
+				"category": "error",
+				"type": "dateFile",
+				"filename": "/tmp/error.log",
+				"pattern": "-yyyy-MM-dd",
+				"backups": 3
+			},
+			{
+				"type": "console"
+			}
+		],
+		"levels": {
+			"access": "ALL",
+			"system": "ALL",
+			"error": "ALL"
+		}
+	}
+}

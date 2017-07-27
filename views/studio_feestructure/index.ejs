@@ -1,0 +1,31 @@
+<div id="managementContents">
+	<div id="main">
+		<h2>料金一覧</h2>
+		<div id="feeStuructureList">
+			<% _.each(studioAreaList, function(studioArea) { %>
+				<div class="studio_list">
+					<h3><%= studioArea.name %></h3>
+					<ul>
+						<% _.each(studioArea.studioAreaRoomList, function(studioAreaRoom) { %>
+							<li>
+								<span><%= studioAreaRoom.name %></span>
+								<input type="button" class="add_button" value="新規登録" onClick="location.href='/studio_feestructure/regist?studioAreaRoomId=<%= studioAreaRoom.id %>'">
+								<ul>
+									<% _.each(studioAreaRoom.studioAreaRoomFeestructureList, function(studioAreaRoomFeestructure) { %>
+										<li>
+											<%= dayTypeMap[studioAreaRoomFeestructure.dayTypeId].name %>
+											<%= studioAreaRoomFeestructure.startTime %> ~ <%= studioAreaRoomFeestructure.endTime %>
+											¥<%= studioAreaRoomFeestructure.price %> (<%= priceTypeMap[studioAreaRoomFeestructure.priceTypeId].name  %>)
+											<input type="button" class="edit_button" value="編集" onClick="location.href='/studio_feestructure/edit?studioAreaRoomFeestructureId=<%= studioAreaRoomFeestructure.id %>'">
+											<input type="button" class="delete_button" value="削除" onClick="location.href='/studio_feestructure/delete?studioAreaRoomFeestructureId=<%= studioAreaRoomFeestructure.id %>'">
+										</li>
+									<% }); %>
+								</ul>
+							</li>
+						<% }); %>
+					</ul>
+				</div>
+			<% }); %>
+		</div>
+	</div>
+</div>

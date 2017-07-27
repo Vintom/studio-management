@@ -1,0 +1,285 @@
+
+#managementContents {
+	width: 100%;
+	display: -webkit-box;　/* Safari,Google Chrome用 */
+	display: -moz-box;　/* Firefox用 */
+}
+
+#managementContents #main {
+	width: 100%;
+	padding-left: 12%;
+	padding-right: 100px;
+	padding-bottom: 100px;
+	-webkit-box-flex: 1;　/* Safari,Google Chrome用 */
+	-moz-box-flex: 1;　/* Firefox用 */
+}
+
+#managementContents h4 {
+	margin-top: 20px;
+	margin-bottom: 10px;
+	margin-left: -10px;
+}
+
+#managementContents h3 {
+	display: inline-block;
+}
+
+#managementContents h2 {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+#managementContents .contents {
+	width: 100%;
+	overflow: hidden;
+	height: 650px;
+}
+
+#managementContents .left_content {
+	float: left;
+	width: 50%;
+}
+
+#managementContents .right_content {
+	overflow: hidden;
+	width: 50%;
+}
+
+#managementContents #picture {
+	max-height: 200px;
+}
+
+#managementContents .clearfix { display: inline-table; } 
+#managementContents .clearfix:after {  
+  content: ".";   
+  display: block;   
+  height: 0;   
+  clear: both;   
+  visibility: hidden;  
+} 
+
+#managementContents .add_button {
+	width: 100px;
+	padding: 3px;
+	text-align: center;
+	color: #FFFFFF;
+	background: #81c784;
+	border-style: none;
+	font-size: 14px;
+	margin-left: 10px;
+	margin-bottom: 5px;
+}
+
+#managementContents .edit_button {
+	width: 100px;
+	padding: 5px;
+	text-align: center;
+/*	color: #FFFFFF;
+	background: #00496D;
+	border-style: none;*/
+	font-size: 16px;
+	margin-left: 10px;
+}
+
+#managementContents .delete_button {
+	width: 100px;
+	padding: 5px;
+	text-align: center;
+	/*color: #FFFFFF;
+	background: #e57373;
+	border-style: none;*/
+	font-size: 16px;
+	margin-left: 10px;
+}
+
+#managementContents .execute_button {
+	width: 100px;
+	padding: 4px;
+	text-align: center;
+	color: #FFFFFF;
+	background: #81c784;
+	border-style: none;
+	font-size: 16px;
+	margin-top: 20px;
+}
+
+#managementContents input {
+	width: 80%;
+}
+
+#managementContents input[type="radio"] {
+    width: 12px;
+}
+
+#managementContents input[name="price"] {
+	width: 150px;
+}
+
+#managementContents p.genre_list {
+	width: 80%;
+}
+
+#managementContents span.genre {
+	display: inline-block;
+}
+
+#managementContents span.genre_name {
+	display: inline-block;
+	margin-top: 10px;
+}
+
+#managementContents input[type="checkbox"] {
+	width: 10px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    height: 20px;
+}
+
+#managementContents input.delete_column_button {
+    width: 120px;
+}
+
+#managementContents textarea {
+	width: 80%;
+}
+
+#managementContents #shopList ul {
+	margin-top: 20px;
+}
+
+#managementContents #shopList ul li {
+	margin-bottom: 20px;
+}
+
+#managementContents #shopList ul li a {
+	display: inline-block;
+	color: #626262;
+	font-size: 20px;
+	margin-top: 10px;
+    height: 30px;
+    vertical-align: middle;
+}
+
+#managementContents #feeStuructureList .studio_list {
+	margin-bottom: 30px;
+}
+
+#managementContents #feeStuructureList ul ul li {
+	margin-left: 20px;
+}
+
+#managementContents #feeStuructureList ul li a {
+	display: inline-block;
+	color: #626262;
+	font-size: 20px;
+	margin-top: 10px;
+    height: 30px;
+    vertical-align: middle;
+}
+
+#managementContents #feeStuructureList ul ul li a {
+	display: inline-block;
+	color: #626262;
+	font-size: 15px;
+	margin-top: 10px;
+    height: 30px;
+    vertical-align: middle;
+}
+
+#managementContents table.user_info {
+    border-collapse: separate;
+    border-spacing: 0px 15px;
+    font-size: 15px;
+}
+ 
+#managementContents table.user_info th,
+#managementContents table.user_info td {
+    padding: 10px;
+}
+ 
+#managementContents table.user_info th {
+    background: #626262;
+    vertical-align: middle;
+    text-align: left;
+    width: 100px;
+    overflow: visible;
+    position: relative;
+    color: #fff;
+    font-weight: normal;
+    font-size: 16px;
+}
+ 
+#managementContents table.user_info th:after {
+    left: 100%;
+    top: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(136, 183, 213, 0);
+    border-left-color: #626262;
+    border-width: 10px;
+    margin-top: -10px;
+}
+
+#managementContents .management_form {
+	margin-bottom: 30px;
+}
+
+#managementContents input.add_column_button {
+    margin-top: 10px;
+    width: 100px;
+}
+
+#managementContents p.error {
+	font-size: 12px;
+	font-weight: normal;
+	color: red;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+/* firefox */
+@-moz-document url-prefix() {
+    table.user_info th::after {
+        float: right;
+        padding: 0;
+        left: 30px;
+        top: 10px;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: relative;
+        pointer-events: none;
+        border: 10px solid transparent;
+        border-left: #626262 10px solid;
+        margin-top: -10px;
+    }
+}
+ 
+#managementContents table.user_info td {
+    background: #f8f8f8;
+    padding-left: 20px;
+    line-height: 20px;
+}
+
+@media (max-width:840px){
+#managementContents #main {
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+#managementContents .contents {
+	height: 100%;
+}
+
+#managementContents .left_content {
+	float: none;
+	width: 100%;
+}
+
+#managementContents .right_content {
+	width: 100%;
+}

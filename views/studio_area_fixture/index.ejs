@@ -1,0 +1,31 @@
+<div id="managementContents">
+	<div id="main">
+		<h2>備品一覧</h2>
+		<div id="shopList">
+			<% if (studioData.studioAreaList.length == 0) { %>
+				<span style="color: #ff0000;">
+					備品は店舗登録後に追加ができます。最初に店舗の登録をしてください。
+				</span>
+			<% } %>
+			<% _.each(studioData.studioAreaList, function(studioArea) {  %>
+				<div class="studio_list">
+					<h3>
+						<%= studioArea.name %>
+					</h3>
+					<input type="button" class="add_button" value="新規登録" onClick="location.href='/studio_area_fixture/regist?studioAreaId=<%= studioArea.id %>'">
+					<% if (studioArea.studioAreaFixtureList.length > 0) { %>
+						<ul>
+							<% _.each(studioArea.studioAreaFixtureList, function(studioAreaFixture) {  %>
+								<li>
+									<span><%= studioAreaFixture.name %></span>
+									<input type="button" class="edit_button" value="編集" onClick="location.href='/studio_area_fixture/edit?studioAreaFixtureId=<%= studioAreaFixture.id %>'">
+									<input type="button" class="delete_button" value="削除" onClick="location.href='/studio_area_fixture/delete?studioAreaFixtureId=<%= studioAreaFixture.id %>'">
+								</li>
+							<% }); %>
+						</ul>
+					<% } %>
+				</div>
+			<% }); %>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,35 @@
+<div id="managementContents">
+	<div id="main">
+		<h2>スタジオ一覧</h2>
+		<div id="shopList">
+			<% _.each(studioData.studioAreaList, function(studioArea) {  %>
+				<div class="studio_list">
+					<h3>
+						<%= studioArea.name %>
+					</h3>
+					<input type="button" class="add_button" value="新規登録" onClick="location.href='/studio_area/regist?studioAreaId=<%= studioArea.id %>'">
+					<% if (studioArea.studioAreaRoomList.length > 0) { %>
+						<ul>
+							<% _.each(studioArea.studioAreaRoomList, function(studioAreaRoom) {  %>
+								<li>
+									<span><%= studioAreaRoom.name %></span>
+									<input type="button" class="edit_button" value="編集" onClick="location.href='/studio_area/edit?studioAreaRoomId=<%= studioAreaRoom.id %>'">
+									<input type="button" class="delete_button" value="削除" data-id="<%= studioAreaRoom.id %>">
+								</li>
+							<% }); %>
+						</ul>
+					<% } %>
+				</div>
+			<% }); %>
+		</div>
+	</div>
+</div>
+
+<script>
+	$("input.delete_button").on("click", function(e) {
+		var id = $(this).data("id");
+		if(window.confirm("スタジオ情報およびスタジオに紐づくすべてのスケジュールが削除されますがよろしいですか？")){
+			location.href="/studio_area/delete?studioAreaRoomId=" + id
+		}
+	})
+</script>

@@ -1,0 +1,491 @@
+<div id="calendarContents">
+	<div id="sub">
+		<div id="studioList">
+			<h3>スタジオ一覧</h3>
+			<ul>
+				<% _.each(studioAreaList, function(studioArea) {  %>
+					<li class="price" style="margin-left:20px"><strong><%= studioArea.name %></strong></li>
+					<% _.each(studioArea.studioAreaRoomList, function(studioAreaRoom) {  %>
+					    <li style="margin-left:40px">
+					    	<form action="" method="post" accept-charset="utf-8">
+					    		<a href="/calendar?studioAreaRoomId=<%= studioAreaRoom.id %>"><%= studioAreaRoom.name %></a>
+					    	</form>
+				    	</li>
+					<% }); %>
+				<% }); %>
+			</ul>
+		</div>
+	</div>
+	<div id="main">
+		<h2 id="studioName">
+			<% if(showStudioArea && showStudioAreaRoom) { %>
+				<%= showStudioArea.name %> <%= showStudioAreaRoom.name %>
+			<% } %>
+		</h2>
+		<div id="calendar">
+			<% if (!showStudioArea) { %>
+				<span style="color: #ff0000;">
+					スタジオは店舗登録後に追加ができます。最初に店舗の登録をしてください。
+				</span>
+			<% } %>
+			<% if (!showStudioAreaRoom) { %>
+				<span style="color: #ff0000;">
+					店舗登録後はスタジオの登録が可能です。スタジオの登録をしてください。
+				</span>
+			<% } %>
+		</div>
+	</div>
+	<div id="eventAdd"  class="remodal" data-remodal-id="event_add">
+	    <!-- モーダルのタイトル -->
+	    <h2>登録</h2>
+	    <div class="form">
+	        <form action="/calendar/regist" method="POST" name="regist" accept-charset="utf-8">
+		    	<h3></h3>
+		    	<p>タイトル</p>
+		    	<input type="text" name="title" value="">
+		    	<p class="error hidden titleValidate">タイトルは必須です</p>
+		    	<p>タイプ</p>
+		    	<input type="radio" name="status" value="busy" checked> スケジュール登録
+		    	<input type="radio" name="status" value="free"> 予約可能
+				<!-- <input type="radio" name="status" value="temporary"> 仮予約
+				<input type="radio" name="status" value="fixed"> 本予約 -->
+		    	<p>開始日時</p>
+		    	<input type="date" name="startDate" value="">
+		    	<input type="time" name="startTime" value="">
+		    	<p>終了日時</p>
+		    	<input type="date" name="endDate" value="">
+		    	<input type="time" name="endTime" value="">
+		    	<p class="error hidden dateValidate">終了日時は開始日時より後にしてください</p>
+		    	<% if (showStudioAreaRoom) { %>
+					<input type="hidden" name="studioAreaRoomId" value="<%= showStudioAreaRoom.id %>"></input>
+		    	<% } %>
+				<input type="hidden" name="calendarView" value=""></input>
+			</form>
+	    </div>
+	    <!-- キャンセルボタン -->
+	    <a class="remodal-cancel" href="#" data-remodal-action="cancel">Cancel</a>
+	    <!-- OKボタン -->
+        <a href="javascript:void(0)" id="actionAdd" class="remodal-confirm" style="display:inline-block">OK</a>
+	</div>
+	<div id="eventEdit" class="remodal" data-remodal-id="event_edit">
+	    <!-- モーダルのタイトル -->
+	    <h2>編集</h2>
+	    <div class="form">
+	        <form action="/calendar/edit" method="POST" name="edit" accept-charset="utf-8">
+		    	<h3></h3>
+		    	<p>タイトル</p>
+		    	<input type="text" name="title" value="">
+		    	<p class="error hidden titleValidate">タイトルは必須です</p>
+		    	<span id="typeForm">
+		    	<p>タイプ</p>
+			    	<input type="radio" name="status" value="busy" checked> スケジュール登録
+			    	<input type="radio" name="status" value="free"> 予約可能
+					<!-- <input type="radio" name="status" value="temporary"> 仮予約
+					<input type="radio" name="status" value="fixed"> 本予約 -->
+				</span>
+				<p>開始日時</p>
+		    	<input type="date" name="startDate" value="">
+		    	<input type="time" name="startTime" value="">
+		    	<p>終了日時</p>
+		    	<input type="date" name="endDate" value="">
+		    	<input type="time" name="endTime" value="">
+		    	<p class="error hidden dateValidate">終了日時は開始日時より後にしてください</p>
+				<input type="hidden" name="studioAreaRoomReserveId" value=""></input>
+				<% if (showStudioAreaRoom) { %>
+					<input type="hidden" name="studioAreaRoomId" value="<%= showStudioAreaRoom.id %>"></input>
+				<% } %>
+				<input type="hidden" name="calendarView" value=""></input>
+			</form>
+	        <form action="/calendar/delete" method="POST" name="delete" accept-charset="utf-8">
+				<input type="hidden" name="studioAreaRoomReserveId" value=""></input>
+				<% if (showStudioAreaRoom) { %>
+				<input type="hidden" name="studioAreaRoomId" value="<%= showStudioAreaRoom.id %>"></input>
+				<% } %>
+				<input type="hidden" name="calendarView" value=""></input>
+			</form>
+	    </div>
+	    <!-- キャンセルボタン -->
+	    <a class="remodal-cancel" href="#" data-remodal-action="cancel">Cancel</a>
+	    <!-- 削除 -->
+		<a href="javascript:void(0)" id="actionDelete" class="remodal-confirm" data-remodal-action="confirm" style="display:inline-block">削除</a>
+	    <!-- OKボタン -->
+        <a href="javascript:void(0)" id="actionEdit" class="remodal-confirm" style="display:inline-block">OK</a>
+	</div>
+	<!-- 承認用モーダル -->
+	<div id="eventAccept" class="remodal" data-remodal-id="event_accept">
+	    <!-- モーダルのタイトル -->
+	    <h2>予約承認</h2>
+	    <div class="form">
+	        <form action="/calendar/edit" method="POST" name="accept" accept-charset="utf-8">
+		    	<h3></h3>
+		    	<p>タイトル</p>
+		    	<span class="title"></span>
+		    	<p>開始日時</p>
+		    	<span class="startDate"></span>
+		    	<span class="startTime"></span>
+		    	<p>終了日時</p>
+		    	<span class="endDate"></span>
+		    	<span class="endTime"></span>
+				<input type="hidden" name="studioAreaRoomId" value=""></input>
+				<% if (showStudioAreaRoom) { %>
+				<input type="hidden" name="studioAreaRoomReserveId" value="<%= showStudioAreaRoom.id %>"></input>
+				<% } %>
+			</form>
+	    </div>
+	    <!-- キャンセルボタン -->
+	    <a class="remodal-cancel" href="#" data-remodal-action="cancel">Cancel</a>
+	    <!-- OKボタン -->
+        <a href="javascript:void(0)" onclick="document.edit.submit();return false;" class="remodal-confirm" data-remodal-action="confirm" style="display:inline-block">予約承認</a>
+	</div>
+</div>
+
+<script>
+	serverParams.studio = <%- JSON.stringify(studio); %>
+	serverParams.studioAreaRoom = <%- JSON.stringify(studioAreaRoom); %>
+	serverParams.showStudioArea = <%- JSON.stringify(showStudioArea); %>
+	serverParams.showStudioAreaRoom = <%- JSON.stringify(showStudioAreaRoom); %>
+	serverParams.studioAreaRoomReserveList = <%- JSON.stringify(studioAreaRoomReserveList); %>
+	serverParams.calendarView = <%- JSON.stringify(calendarView); %>
+	serverParams.currentDate = <%- JSON.stringify(currentDate); %>
+
+	var events = [];
+	serverParams.studioAreaRoomReserveList.forEach(function(studioAreaRoomReserve, index){
+		var color = '#00FFFF';
+		if (studioAreaRoomReserve.status == 'free') {
+		var color = '#AAAAAA'
+		} else if (studioAreaRoomReserve.status == 'temporary') {
+			color = '#FFCCCC';
+		} else if (studioAreaRoomReserve.status == 'fixed') {
+			color = '#E57373';
+		}
+		events.push({
+			id : studioAreaRoomReserve.id,
+			title : studioAreaRoomReserve.title,
+			start : studioAreaRoomReserve.start,
+			end : studioAreaRoomReserve.end,
+			status: studioAreaRoomReserve.status,
+			color: color,
+			textColor: '#000000'
+		});
+	});
+	var studio = {
+		"id": "100",
+		// "name": "A101",
+		// "place": "渋谷スタジオ", 
+		"events": events
+	}
+
+	var week = [ "日", "月", "火", "水", "木", "金", "土"]
+
+	var defaultSettingHour = 2
+	if (serverParams.showStudioArea && serverParams.showStudioAreaRoom) {
+		$(document).ready(function() {
+			var contentHeight = $(window).height() - 200;
+			
+			// TODO 初期表示を現在時刻にカーソルさせる
+			var first_scroll_time = serverParams.currentDate.currentStartTime;
+			if (serverParams.studioAreaRoom) {
+				first_scroll_time = serverParams.studioAreaRoom.startTime;
+			}
+			var defaultView = serverParams.calendarView || 'agendaWeek';
+			if (defaultView == '月') {
+				defaultView = 'month';
+			} else if (defaultView == '日') {
+				defaultView = 'agendaDay';
+			} else {
+				defaultView = 'agendaWeek';
+			}
+			// カレンダー周りの設定
+			$('#calendar').fullCalendar({
+				contentHeight: contentHeight,
+				defaultView: defaultView,
+				header: {
+					left: 'prev, next',
+					center: 'title',
+					right: 'month agendaWeek agendaDay'
+				},
+				// ボタン文字列
+				buttonText: {
+				    prev:     '<',
+				    next:     '>',
+				    today:    '今日',
+				    month:    '月',
+				},
+				// 月名称
+				monthNames: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+				// 月略称
+				monthNamesShort: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+				// 曜日名称
+				dayNames: ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'],
+				// 曜日略称
+				dayNamesShort: ['日', '月', '火', '水', '木', '金', '土'],
+				// タイトルの書式
+				titleFormat: {
+				    month: 'YYYY年 M月'
+				},
+				// 列の書式
+				columnFormat: {
+				    month: 'ddd',
+				    week: 'D（ddd）'
+				},
+				// 行の時間の書式
+				axisFormat: 'H:mm',
+				// 時間の書式
+				timeFormat: 'H:mm',
+				scrollTime: first_scroll_time,
+				// 初期表示の日付
+				//defaultDate: '2016-01-12',
+				editable: false,
+				eventLimit: true, // allow "more" link when too many events
+				// APIのレスポンスは以下の形式で
+				events: studio.events,
+				// カレンダーのどこかをクリックしたらイベントを作る
+		        dayClick: function(date, allDay, jsEvent, view) {
+		            // $('#calendar').fullCalendar('addEventSource', [{
+		            //     title: '峰岸 啓人 様',
+		            //     start: '2016-05-10T11:00:00',
+		            //     end: '2016-05-10T13:00:00'
+		            // }]);
+		            $("[data-remodal-id=event_add]").remodal().open();
+		           	var selectedDate = new Date(date)
+		           	var year = selectedDate.getFullYear()
+		           	var month = selectedDate.getMonth() + 1
+		           	var day = selectedDate.getDate()
+		           	var youbi = week[selectedDate.getDay()]
+		            $("#eventAdd h3").text(month + "月" + day + "日（" + youbi + "）");
+
+		            var fullMonthString = fullString(month);
+		            var fullDayString = fullString(day);
+		            var dateString = year + "-" + fullMonthString + "-" + fullDayString
+		            $("#eventAdd input[name='startDate']").val(dateString)
+		            $("#eventAdd input[name='endDate']").val(dateString)
+
+		            var hour = selectedDate.getHours() - 9 >= 0 ? selectedDate.getHours() - 9 : 24+(selectedDate.getHours() - 9) 
+		            var minutes = selectedDate.getMinutes();
+		            $("#eventAdd input[name='startTime']").val(fullString(hour) + ":" + fullString(minutes))
+		            
+		            if (hour + defaultSettingHour > 23) {
+		            	var overHour = fullString(hour + defaultSettingHour - 24)
+		            	$("#eventAdd input[name='endTime']").val(overHour + ":" + minutes)
+		            	var fullDayString = fullString(day + 1);
+		            	var dateString = year + "-" + fullMonthString + "-" + fullDayString
+		            	$("#eventAdd input[name='endDate']").val(dateString)
+		            } else {
+		            	$("#eventAdd input[name='endTime']").val(fullString(hour + defaultSettingHour) + ":" + fullString(minutes))	
+		            }
+		            $("#eventAdd input[name='title']").focus();
+		            console.log($(".fc-state-active").html());
+		         	$("#eventAdd input[name='calendarView']").val($(".fc-state-active").html());
+		        },
+		        eventClick: function(calEvent, jsEvent, view) {
+		            // calEvent.title = '峰岸 啓人 様';
+		            // calEvent.start = '2016-04-12T17:00:00'
+		            // calEvent.end = '2016-04-12T19:00:00'
+		            // $('#calendar').fullCalendar('updateEvent', calEvent);
+		            switch(calEvent.status) {
+		            	case 'busy':
+		            	case 'free':
+		            	case 'fixed': {
+		            		// $("#typeForm").remoClass("hidden");
+		            		var title = calEvent.title;
+				        	$("[data-remodal-id=event_edit]").remodal().open();
+				         	$("#eventEdit input[name='studioAreaRoomReserveId']").val(calEvent.id);
+				         	$("#eventEdit input[name='title']").val(title);
+				         	// 
+				         	$("#eventEdit input[name='calendarView']").val($(".fc-state-active").html());
+
+							// 開始情報
+				         	var startDate = calEvent.start._d;
+				           	var startYear = startDate.getFullYear();
+				         	var startMonth = startDate.getMonth() + 1;
+				           	var startDay = startDate.getDate();
+				           	var startYoubi = week[startDate.getDay()];
+				           	// 見出し
+				           	$("#eventEdit h3").text(startMonth + "月" + startDay + "日（" + startYoubi + "）");
+				            // 開始日
+				            var startFullMonthString = fullString(startMonth);
+				            var startFullDayString = fullString(startDay);
+				            var startDateString = startYear + "-" + startFullMonthString + "-" + startFullDayString
+				            $("#eventEdit input[name='startDate']").val(startDateString);
+				            // 開始時間
+				            var startHour = startDate.getHours() - 9 >= 0 ? startDate.getHours() - 9 : 24+(startDate.getHours() - 9);
+				            var startMinutes = startDate.getMinutes();
+				            $("#eventEdit input[name='startTime']").val(fullString(startHour) + ":" + fullString(startMinutes));
+
+
+				            // 終了情報
+				         	var endDate = calEvent.end._d;
+				         	var endYear = endDate.getFullYear();
+				         	var endMonth = endDate.getMonth() + 1;
+				           	var endDay = endDate.getDate();
+				           	var endYoubi = week[endDate.getDay()];
+				            // 終了日
+				            var endFullMonthString = fullString(endMonth);
+				            var endFullDayString = fullString(endDay);
+				            var endDateString = endYear + "-" + endFullMonthString + "-" + endFullDayString;
+				            $("#eventEdit input[name='endDate']").val(endDateString);
+
+				            // 終了時間
+				            var endHour = endDate.getHours() - 9 >= 0 ? endDate.getHours() - 9 : 24+(endDate.getHours() - 9) 
+				            var endMinutes = endDate.getMinutes();
+				            if (endHour > 23) {
+				            	var overHour = fullString(endHour - 24);
+				            	$("#eventEdit input[name='endTime']").val(overHour + ":" + minutes);
+				            	var fullDayString = fullString(endDay + 1);
+				            	var dateString = endYear + "-" + endFullMonthString + "-" + endFullDayString;
+				            	$("#eventEdit input[name='endDate']").val(endDateString);
+				            } else {
+				            	$("#eventEdit input[name='endTime']").val(fullString(endHour) + ":" + fullString(endMinutes));	
+				            } 
+				            switch (calEvent.status) {
+				            	case "busy":
+				            		$('input[name="status"]').val(['busy']);
+				            		break;
+				            	case "free":
+				            		$('input[name="status"]').val(['free']);
+				            		break;
+				            	case "fixed":
+				            		$("#typeForm").addClass("hidden");
+				            }
+
+				            break;
+		            	}
+		            	case 'temporary': {
+		            		
+		            		$("[data-remodal-id=event_accept]").remodal().open();
+		            		
+		            		// 開始に関する情報
+		            		var startDate = calEvent.start._d;
+				           	var startYear = startDate.getFullYear();
+				         	var startMonth = startDate.getMonth() + 1;
+				           	var startDay = startDate.getDate();
+				           	var startYoubi = week[startDate.getDay()];
+				            // 開始日
+				            var startFullMonthString = fullString(startMonth);
+				            var startFullDayString = fullString(startDay);
+				            var startDateString = startYear + "-" + startFullMonthString + "-" + startFullDayString
+				            
+				            var title = calEvent.title;
+				            var startHour = startDate.getHours() - 9 >= 0 ? startDate.getHours() - 9 : 24+(startDate.getHours() - 9);
+				            var startMinutes = startDate.getMinutes();
+				            $("#eventAccept h3").text(startMonth + "月" + startDay + "日（" + startYoubi + "）");
+
+		            		$("#eventAccept .title").text(title);
+
+				            $("#eventAccept .startDate").text(startDateString);
+				            
+				            $("#eventAccept .startTime").text(fullString(startHour) + ":" + fullString(startMinutes))
+				           
+
+				            // 終了に関する情報
+				            var endDate = calEvent.end._d;
+		            		var endYear = endDate.getFullYear();
+				         	var endMonth = endDate.getMonth() + 1;
+				           	var endDay = endDate.getDate();
+				           	 // 終了日
+				            var endFullMonthString = fullString(endMonth);
+				            var endFullDayString = fullString(endDay);
+				            var endDateString = endYear + "-" + endFullMonthString + "-" + endFullDayString
+
+				           	
+				            $("#eventAccept .endDate").text(endDateString)
+				            var endHour = endDate.getHours() - 9 >= 0 ? endDate.getHours() - 9 : 24+(endDate.getHours() - 9);
+				            var endMinutes = endDate.getMinutes();
+				            if (endHour > 23) {
+				            	var overHour = fullString(endHour - 24);
+				            	$("#eventAccept .endTime").text(overHour + ":" + endMinutes);
+				            	var fullDayString = fullString(endDay + 1);
+				            	var dateString = startYear + "年" + fullMonthString + "月" + fullDayString　+ "日"
+				            	$("#eventAccept .endDate").text(dateString);
+				            } else {
+				            	$("#eventAccept .endTime").text(fullString(endHour) + ":" + fullString(endMinutes));
+				            }
+		            		break;
+		            	}
+		            }
+		        }
+			});
+
+			// TODO 指定の日付を表示
+			var gotoDate = serverParams.currentDate.currentStartDate;
+			if (serverParams.studioAreaRoom) {
+				gotoDate = serverParams.studioAreaRoom.startDate
+			}
+			$('#calendar').fullCalendar('gotoDate', gotoDate);
+
+			function fullString(defaultString) {
+		    	return (defaultString < 10 ? "0" : "")  + defaultString;
+		    }
+
+		    $("#actionAdd").on("click", function(e) {
+
+		    	var dateValidate = true;
+		    	var titleValidate = true;
+
+		    	var startDate = $("#eventAdd input[name='startDate']").val();
+		    	var endDate = $("#eventAdd input[name='endDate']").val();
+		    	var startTime = $("#eventAdd input[name='startTime']").val();
+		    	var endTime = $("#eventAdd input[name='endTime']").val();
+
+				var start = new Date(startDate +' '+ startTime);
+				var end = new Date(endDate +' '+ endTime);
+				if (start.getTime() >= end.getTime()) {
+					$("#eventAdd .error.dateValidate").removeClass("hidden");
+					dateValidate = false;
+				} else {
+					$("#eventAdd .error.dateValidate").addClass("hidden");
+				}
+
+		    	var title = $("#eventAdd input[name='title']").val();
+		    	if (title == "" || title.match(/^[ 　\r\n\t]*$/)) {
+		    		$("#eventAdd .error.titleValidate").removeClass("hidden");
+		    		titleValidate = false;
+	  			} else {
+	  				$("#eventAdd .error.titleValidate").addClass("hidden");
+	  			}
+
+	  			if (dateValidate && titleValidate){
+	  				document.regist.submit();
+	  			}
+		    })
+
+		    $("#actionEdit").on("click", function(e) {
+		    	var dateValidate = true;
+		    	var titleValidate = true;
+
+		    	var startDate = $("#eventEdit input[name='startDate']").val();
+		    	var endDate = $("#eventEdit input[name='endDate']").val();
+		    	var startTime = $("#eventEdit input[name='startTime']").val();
+		    	var endTime = $("#eventEdit input[name='endTime']").val();
+
+				var start = new Date(startDate +' '+ startTime);
+				var end = new Date(endDate +' '+ endTime);
+				if (start.getTime() == end.getTime()) {
+					$("#eventEdit .error.dateValidate").removeClass("hidden");
+					dateValidate = false;
+				} else {
+					$("#eventEdit .error.dateValidate").addClass("hidden");
+				}
+
+		    	var title = $("#eventEdit input[name='title']").val();
+		    	if (title == "" || title.match(/^[ 　\r\n\t]*$/)) {
+		    		$("#eventEdit .error.titleValidate").removeClass("hidden");
+		    		titleValidate = false;
+	  			} else {
+	  				$("#eventEdit .error.titleValidate").addClass("hidden");
+	  			}
+
+	  			if (dateValidate && titleValidate){
+	  				document.edit.submit();
+	  			}
+		    })
+		});
+
+		$("#actionDelete").on("click", function(e) {
+			if(window.confirm("スケジュールを削除しますか？")){
+     			document.delete.submit();
+     		}		    
+		});
+	}
+
+</script>
